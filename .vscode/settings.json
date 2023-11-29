@@ -166,8 +166,5 @@
         ".rcall": "rcall", // for a ray callable shader
         ".mesh": "mesh", // for a mesh shader
         ".task": "task" // for a task shader
-    },
-    "files.exclude": {
-        "**/.git": false
     }
 }
