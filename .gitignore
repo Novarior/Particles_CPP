@@ -1,0 +1,4 @@
+#ignore default files
+.DS_Store
+/build
+/CMakeFiles
