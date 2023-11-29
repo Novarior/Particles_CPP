@@ -1,4 +1,7 @@
 some particle system, write by SFML Team
+https://www.sfml-dev.org/tutorials/2.6/graphics-vertex-array.php
+
+
 i did some changes to change the color of the particles and add movement to them
 
 
