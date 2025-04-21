@@ -1,4 +1,6 @@
-some particle system, write by SFML Team
+№ some particle system
+with shaders
+
 https://www.sfml-dev.org/tutorials/2.6/graphics-vertex-array.php
 
 
