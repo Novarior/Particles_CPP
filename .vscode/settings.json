@@ -122,6 +122,7 @@
     "C_Cpp.codeAnalysis.clangTidy.codeAction.formatFixes": true,
     "editor.formatOnPaste": true,
     "editor.formatOnType": true,
+    "glsl-linter.validatorPath": "",
     "clang-format.executable": "clang-format",
     "glsllint.languageSettings": {
         "LANGID": {

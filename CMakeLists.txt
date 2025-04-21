@@ -19,9 +19,8 @@ if (APPLE)
 endif()
 
 #find the SFML libraries
-find_package(SFML 2.6.1 COMPONENTS graphics REQUIRED)
-find_package(SFML 2.6.1 COMPONENTS system REQUIRED)
-find_package(SFML 2.6.1 COMPONENTS window REQUIRED)
+find_package(SFML 3.0.0 REQUIRED COMPONENTS Graphics Audio Network System)
+message("SFML was found = ${SFML_FOUND}")
 
 #link image to build
 set(MACOSX_BUNDLE_ICON_FILE myAppImage)
@@ -42,7 +41,9 @@ if (APPLE)
 target_link_libraries(Particles "-framework CoreFoundation")
     target_compile_options(Particles PUBLIC -O3)
     set_target_properties(Particles PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON)
-    target_link_libraries(Particles sfml-graphics sfml-window sfml-system)
+    target_link_libraries(Particles   
+        SFML::Graphics
+        SFML::System)
     
     set_target_properties(Particles PROPERTIES MACOSX_BUNDLE TRUE)
     set_target_properties(Particles PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Particles")
@@ -52,6 +53,7 @@ target_link_libraries(Particles "-framework CoreFoundation")
     set_target_properties(Particles PROPERTIES MACOSX_BUNDLE_ICON_FILE "ico.png")
     set_target_properties(Particles PROPERTIES RESOURCE "${myApp_ICON}")
     set_target_properties(Particles PROPERTIES RESOURCE "${myApp_FONT}")
+
     
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin) 
 endif()
