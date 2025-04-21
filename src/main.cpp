@@ -16,10 +16,15 @@ int main() {
   // set window fullscreen
 
   // load font
-  sf::Font font(std::filesystem::path(
-      get_resources_dir().append("/Fonts/Muli-Regular.ttf")));
+  sf::Font font(
+      std::filesystem::path(get_resources_dir().append("/Muli-Regular.ttf")));
+
+  sf::Shader shdr(std::filesystem::path(get_resources_dir().append("/sp.frag")),
+                  sf::Shader::Type::Fragment);
 
   std::stringstream ss;
+  sf::RectangleShape shape;
+  shape.setSize(sf::Vector2f(window.getSize()));
 
   // text for fps counter
   sf::Text m_fps(font, "", 20);
@@ -32,6 +37,7 @@ int main() {
   // clock
   sf::Clock clock;
   float deltaTime = 0.f;
+  float mTime = 0.f;
 
   // debug text
   sf::Vector2f bufferPos = {0, 0};
@@ -56,6 +62,7 @@ int main() {
     }
     // update delta time
     deltaTime = clock.restart().asSeconds();
+    mTime += deltaTime;
 
     // move view using sin and cos functions
     //  multiply by delta time to make it framerate independen
@@ -78,16 +85,18 @@ int main() {
     // make the particle system emitter follow the mouse
     sf::Vector2i mouse = sf::Mouse::getPosition(window);
     // particles.setEmitter(window.mapPixelToCoords(mouse));
-    particles.setEmitter(sf::Vector2f(850 + sin(bufferPos.x / 10) * 300,
-                                      530 + cos(bufferPos.y / 10) * 300));
 
     // update particle system
-    particles.update(deltaTime);
+    // particles.update(deltaTime);
+
+    shdr.setUniform("u_time", mTime);
+    shdr.setUniform("u_resolution", sf::Vector2f(window.getSize()));
+    shdr.setUniform("u_mouse", sf::Vector2f(mouse));
 
     // set view
     // draw it
     window.clear();
-    window.draw(particles);
+    window.draw(shape, &shdr);
     window.draw(m_fps);
     window.display();
   }

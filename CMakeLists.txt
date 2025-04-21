@@ -28,13 +28,16 @@ set(MACOSX_BUNDLE_ICON_FILE myAppImage)
 set(myApp_ICON ${CMAKE_CURRENT_SOURCE_DIR}/ico.png)
 set_source_files_properties(${myApp_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 
+set(myApp_SHADER ${CMAKE_CURRENT_SOURCE_DIR}/sp.frag)
+set_source_files_properties(${myApp_SHADER} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+
 #upload font to build
 set(myApp_FONT ${CMAKE_CURRENT_SOURCE_DIR}/Muli-Regular.ttf)
-set_source_files_properties(${myApp_FONT} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources/Fonts")
+set_source_files_properties(${myApp_FONT} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 
 
 
-add_executable(Particles MACOSX_BUNDLE ${myApp_ICON} ${myApp_FONT} src/main.cpp)
+add_executable(Particles MACOSX_BUNDLE ${myApp_ICON} ${myApp_FONT} ${myApp_SHADER} src/main.cpp)
 
 #build project in release mode for MACOS 
 if (APPLE)
