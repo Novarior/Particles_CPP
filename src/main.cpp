@@ -84,10 +84,10 @@ int main() {
 
     // make the particle system emitter follow the mouse
     sf::Vector2i mouse = sf::Mouse::getPosition(window);
-    // particles.setEmitter(window.mapPixelToCoords(mouse));
+    particles.setEmitter(window.mapPixelToCoords(mouse));
 
     // update particle system
-    // particles.update(deltaTime);
+    particles.update(deltaTime);
 
     shdr.setUniform("u_time", mTime);
     shdr.setUniform("u_resolution", sf::Vector2f(window.getSize()));
@@ -96,7 +96,7 @@ int main() {
     // set view
     // draw it
     window.clear();
-    window.draw(shape, &shdr);
+    window.draw(particles, &shdr);
     window.draw(m_fps);
     window.display();
   }
