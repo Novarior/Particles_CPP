@@ -8,7 +8,7 @@
 int main() {
 
   // create SFML window 800x600 with title "particle system" on fullscreen
-  sf::RenderWindow window(sf::VideoMode({1200, 800}), "particle system",
+  sf::RenderWindow window(sf::VideoMode({800, 800}), "particle system",
                           sf::Style::Default);
   // set framerate limit to 120 fps and vertical sync enabled
   window.setFramerateLimit(120);
@@ -25,10 +25,13 @@ int main() {
   std::stringstream ss;
   sf::RectangleShape shape;
   shape.setSize(sf::Vector2f(window.getSize()));
+  shape.setFillColor(sf::Color::White);
 
   // text for fps counter
   sf::Text m_fps(font, "", 20);
   m_fps.setFillColor(sf::Color::White);
+  m_fps.setOutlineThickness(1.f);
+  m_fps.setOutlineColor(sf::Color::Black);
   m_fps.setPosition({10, 10});
 
   // create particle system
@@ -47,9 +50,12 @@ int main() {
     // event loop
     while (const std::optional event = window.pollEvent()) {
       // close window on close event
-      if (event->is<sf::Event::Closed>()) {
+      if (event->is<sf::Event::Closed>())
         window.close();
-      }
+
+      if (const auto *resized = event->getIf<sf::Event::Resized>())
+        window.setSize(resized->size);
+
       // close window on escape key pressed
       if (event->is<sf::Event::KeyPressed>()) {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
@@ -72,31 +78,31 @@ int main() {
     // update view
 
     // update text counter
-    ss << "FPS: " + std::to_string((int)(1.f / deltaTime))
-       << "\nParticles: " + std::to_string(particles.get_size())
-       << "\nEmitter[0] lifetime: " +
-              std::to_string(particles.get_zeroEmitterLifeTime())
-       << "\nParticle[0] alpha: " + std::to_string(particles.get_alpha())
-       << "\nDraw mode:\t" + particles.get_draw_mode();
+    ss << "FPS: " + std::to_string((int)(1.f / deltaTime));
+    //  << "\nParticles: " + std::to_string(particles.get_size())
+    //   << "\nEmitter[0] lifetime: " +
+    //         std::to_string(particles.get_zeroEmitterLifeTime())
+    //  << "\nParticle[0] alpha: " + std::to_string(particles.get_alpha())
+    //  << "\nDraw mode:\t" + particles.get_draw_mode();
 
     m_fps.setString(ss.str());
     ss.str("");
 
     // make the particle system emitter follow the mouse
     sf::Vector2i mouse = sf::Mouse::getPosition(window);
-    particles.setEmitter(window.mapPixelToCoords(mouse));
+    //  particles.setEmitter(window.mapPixelToCoords(mouse));
 
     // update particle system
-    particles.update(deltaTime);
+    // particles.update(deltaTime);
 
     shdr.setUniform("u_time", mTime);
     shdr.setUniform("u_resolution", sf::Vector2f(window.getSize()));
-    shdr.setUniform("u_mouse", sf::Vector2f(mouse));
+    // shdr.setUniform("u_mouse", sf::Vector2f(mouse));
 
     // set view
     // draw it
     window.clear();
-    window.draw(particles, &shdr);
+    window.draw(shape, &shdr);
     window.draw(m_fps);
     window.display();
   }
