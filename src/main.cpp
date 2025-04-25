@@ -8,7 +8,7 @@
 int main() {
 
   // create SFML window 800x600 with title "particle system" on fullscreen
-  sf::RenderWindow window(sf::VideoMode({800, 800}), "particle system",
+  sf::RenderWindow window(sf::VideoMode({640,1024}), "particle system",
                           sf::Style::Default);
   // set framerate limit to 120 fps and vertical sync enabled
   window.setFramerateLimit(120);
