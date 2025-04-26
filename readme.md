@@ -17,6 +17,7 @@ was make for self-learn
 - [portal shader](sp4.frag) - [src](https://www.shadertoy.com/view/lcfyDj)
 - [Colorworm tunel](sp5.frag) - [scr](https://www.shadertoy.com/view/33sSzf)
 
+[preview](demo/)
 also there have a shader template for SFML 3.0
 
 there are some reasons why the template is exactly like this
