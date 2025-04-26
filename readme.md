@@ -17,7 +17,9 @@ was make for self-learn
 - [portal shader](sp4.frag) - [src](https://www.shadertoy.com/view/lcfyDj)
 - [Colorworm tunel](sp5.frag) - [scr](https://www.shadertoy.com/view/33sSzf)
 
-also there have a shader template
+also there have a shader template for SFML 3.0
+
+there are some reasons why the template is exactly like this
 ```glsl
 /* Signed distance drawing methods */
 #ifdef GL_ES
@@ -38,7 +40,9 @@ uniform float u_time;
 #define uv vec2(gl_FragCoord.xy/u_resolution.xy)
 
 vec4 mainImage(vec4 fragColor,vec4 fragCoord){
-    
+
+// you shader code...
+
     fragColor=vec4(sin(uv.x),cos(uv.y),tan(uv.xy));
     return fragColor;
 }
