@@ -2,13 +2,14 @@
 #include "getpath.hpp"
 #include "headers.hpp"
 #include "particle.hpp"
+#include <SFML/OpenGL.hpp>
 #include <filesystem>
 #include <optional>
 
 int main() {
 
   // create SFML window 800x600 with title "particle system" on fullscreen
-  sf::RenderWindow window(sf::VideoMode({640,1024}), "particle system",
+  sf::RenderWindow window(sf::VideoMode({800, 600}), "particle system",
                           sf::Style::Default);
   // set framerate limit to 120 fps and vertical sync enabled
   window.setFramerateLimit(120);
@@ -22,10 +23,14 @@ int main() {
   sf::Shader shdr(std::filesystem::path(get_resources_dir().append("/sp.frag")),
                   sf::Shader::Type::Fragment);
 
+  // sf::Texture t_holder(
+  //    std::filesystem::path(get_resources_dir().append("/ico.png")));
+
   std::stringstream ss;
   sf::RectangleShape shape;
   shape.setSize(sf::Vector2f(window.getSize()));
   shape.setFillColor(sf::Color::White);
+  // shape.setTexture(&t_holder);
 
   // text for fps counter
   sf::Text m_fps(font, "", 20);
@@ -35,7 +40,7 @@ int main() {
   m_fps.setPosition({10, 10});
 
   // create particle system
-  ParticleSystem particles(400'000, sf::Vector2f(window.getSize()));
+  // ParticleSystem particles(400'000, sf::Vector2f(window.getSize()));
 
   // clock
   sf::Clock clock;
@@ -62,8 +67,8 @@ int main() {
           window.close();
 
         // call change color mode on key pressed (C)
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::C))
-          particles.change_draw_mode();
+        // if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::C))
+        //   particles.change_draw_mode();
       }
     }
     // update delta time
@@ -97,6 +102,7 @@ int main() {
 
     shdr.setUniform("u_time", mTime);
     shdr.setUniform("u_resolution", sf::Vector2f(window.getSize()));
+    // shdr.setUniform("u_texture", t_holder);
     // shdr.setUniform("u_mouse", sf::Vector2f(mouse));
 
     // set view

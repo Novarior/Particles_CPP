@@ -8,46 +8,45 @@ uniform vec2 u_mouse;
 uniform vec2 u_coord;
 uniform float u_time;
 
-#define PI_TWO 1.570796326794897
-#define PI 3.141592653589793
-#define TWO_PI 6.283185307179586
+uniform sampler2D u_texture;
 
-#define rx 1./min(u_resolution.x,u_resolution.y)
-#define uv1 gl_FragCoord.xy/u_resolution.xy
+#define PI_TWO float 1.570796326794897
+#define PI float 3.141592653589793
+#define TWO_PI float 6.283185307179586
+
+#define rx vec2(1./min(u_resolution.x,u_resolution.y))
+#define uv1 vec2(gl_FragCoord.xy/u_resolution.xy)
+
+float Cir(vec2 uv,float r,bool blur){
+    float a=0.;
+    float b=0.;
+    if(blur){
+        a=.001;
+        b=.1;
+    }
+    else{
+        a=0.0;
+        b=5./u_resolution.y;
+    }
+    return smoothstep(a,b,length(uv)-r);
+}
 
 vec4 mainImage(vec4 fragColor,vec4 fragCoord){
-    //Iterator and attenuation (distance-squared)
-    float iterator=.15;
-    float alpha=0.;
-    //Resolution for scaling and centering
-    //Centered ratio-corrected coordinates
-    vec2 point=(fragCoord.xy*2.-u_resolution)/u_resolution.y/.7;
-    //Diagonal vector for skewing
-    vec2 diagonal=vec2(-1,1);
-    //Blackhole center
-    vec2 blackhole=point-iterator*diagonal;
-    //Rotate and apply perspective
+    vec2 uv=(fragCoord.xy-.5*u_resolution.xy)/u_resolution.y;
+    vec2 t=vec2(sin(u_time*2.),sin(u_time*3.+cos(u_time*.5)))*.1;
     
-    vec2 v1=vec2(dot(blackhole,blackhole));
-    vec2 v2=.1+iterator/v1;
-    vec2 v3=vec2(mat2(3,3,diagonal/v2));
-    vec2 coor=point*v3;
-    //Rotate into spiraling coordinates
-    vec2 vect=coor*mat2(cos(1.*log(alpha=dot(coor,coor))+u_time*iterator+vec4(0,33,11,0)))/iterator;
-    //Waves cumulative total for coloring
-    vec2 wave=vec2(0.,0.);
+    vec3 Col0=vec3(1.0, 1.0, 1.0);
+    vec3 Col1=vec3(.1+uv.y*2.,.4+uv.x*-1.1,.8)*.828;
+    vec3 Col2=vec3(1.0, 1.0, 1.0);
     
-    //Loop through waves
-    for(int q=2;q<9;q++){
-        wave+=(1.+sin(vect));
-        vect+=.7*sin(vect.yx*iterator+u_time)/iterator+.5;
-    }
+    float cir1=Cir(uv-t,.2,false);
+    float cir2=Cir(uv+t,.2,false);
+    float cir2B=Cir(uv+t,.16,true);
     
-    iterator=length(sin(vect/.3)*.4+coor*(1.5+diagonal));
-    //Red/blue gradient
-    
-    fragColor=vec4(1.-exp(-exp(coor.x*vec4(2.6,-.1,-1.2,sin(u_time*3.14)))/wave.xyyx/(2.+iterator*iterator/4.-iterator)/(.5+1./alpha)/(.03+abs(length(point)-.7))));
-    
+    vec3 col=mix(Col1+vec3(.3,.1,0.),Col2,cir2B);
+    col=mix(col,Col0,cir1);
+    col=mix(col,Col1,clamp(cir1-cir2,0.,1.));
+    fragColor=vec4(col,1.);
     return fragColor;
 }
 
